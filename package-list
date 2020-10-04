@@ -2,16 +2,16 @@ io.github.retrooper.packetevents
 io.github.retrooper.packetevents.annotations
 io.github.retrooper.packetevents.enums
 io.github.retrooper.packetevents.event
+io.github.retrooper.packetevents.event.annotation
 io.github.retrooper.packetevents.event.impl
 io.github.retrooper.packetevents.event.manager
 io.github.retrooper.packetevents.event.priority
 io.github.retrooper.packetevents.example
+io.github.retrooper.packetevents.exceptions
 io.github.retrooper.packetevents.nettyhandler
-io.github.retrooper.packetevents.packet
 io.github.retrooper.packetevents.packettype
 io.github.retrooper.packetevents.packetwrappers
 io.github.retrooper.packetevents.packetwrappers.in.abilities
-io.github.retrooper.packetevents.packetwrappers.in.armanimation
 io.github.retrooper.packetevents.packetwrappers.in.blockdig
 io.github.retrooper.packetevents.packetwrappers.in.blockplace
 io.github.retrooper.packetevents.packetwrappers.in.chat
@@ -32,6 +32,8 @@ io.github.retrooper.packetevents.packetwrappers.out.animation
 io.github.retrooper.packetevents.packetwrappers.out.chat
 io.github.retrooper.packetevents.packetwrappers.out.custompayload
 io.github.retrooper.packetevents.packetwrappers.out.entity
+io.github.retrooper.packetevents.packetwrappers.out.entitymetadata
+io.github.retrooper.packetevents.packetwrappers.out.entityteleport
 io.github.retrooper.packetevents.packetwrappers.out.entityvelocity
 io.github.retrooper.packetevents.packetwrappers.out.gamestatechange
 io.github.retrooper.packetevents.packetwrappers.out.keepalive
@@ -41,6 +43,7 @@ io.github.retrooper.packetevents.packetwrappers.out.position
 io.github.retrooper.packetevents.packetwrappers.out.transaction
 io.github.retrooper.packetevents.packetwrappers.out.updatehealth
 io.github.retrooper.packetevents.settings
+io.github.retrooper.packetevents.updatechecker
 io.github.retrooper.packetevents.utils
 io.github.retrooper.packetevents.utils.bytebuf
 io.github.retrooper.packetevents.utils.entityfinder
@@ -52,6 +55,6 @@ io.github.retrooper.packetevents.utils.protocolsupport
 io.github.retrooper.packetevents.utils.reflection
 io.github.retrooper.packetevents.utils.server
 io.github.retrooper.packetevents.utils.v_1_7_10
-io.github.retrooper.packetevents.utils.vector
 io.github.retrooper.packetevents.utils.versionlookup
 io.github.retrooper.packetevents.utils.viaversion
+io.github.retrooper.packetevents.version
