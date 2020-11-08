@@ -46,6 +46,7 @@ io.github.retrooper.packetevents.packetwrappers.out.entityvelocity
 io.github.retrooper.packetevents.packetwrappers.out.experience
 io.github.retrooper.packetevents.packetwrappers.out.explosion
 io.github.retrooper.packetevents.packetwrappers.out.gamestatechange
+io.github.retrooper.packetevents.packetwrappers.out.helditemslot
 io.github.retrooper.packetevents.packetwrappers.out.keepalive
 io.github.retrooper.packetevents.packetwrappers.out.kickdisconnect
 io.github.retrooper.packetevents.packetwrappers.out.position
