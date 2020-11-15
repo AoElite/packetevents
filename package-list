@@ -36,6 +36,7 @@ io.github.retrooper.packetevents.packetwrappers.login.in
 io.github.retrooper.packetevents.packetwrappers.login.out
 io.github.retrooper.packetevents.packetwrappers.out.abilities
 io.github.retrooper.packetevents.packetwrappers.out.animation
+io.github.retrooper.packetevents.packetwrappers.out.blockchange
 io.github.retrooper.packetevents.packetwrappers.out.chat
 io.github.retrooper.packetevents.packetwrappers.out.custompayload
 io.github.retrooper.packetevents.packetwrappers.out.entity
@@ -55,17 +56,12 @@ io.github.retrooper.packetevents.packetwrappers.out.updatehealth
 io.github.retrooper.packetevents.packetwrappers.status
 io.github.retrooper.packetevents.settings
 io.github.retrooper.packetevents.updatechecker
-io.github.retrooper.packetevents.utils
 io.github.retrooper.packetevents.utils.bytebuf
 io.github.retrooper.packetevents.utils.entityfinder
 io.github.retrooper.packetevents.utils.gameprofile
 io.github.retrooper.packetevents.utils.nms
 io.github.retrooper.packetevents.utils.player
-io.github.retrooper.packetevents.utils.protocollib
-io.github.retrooper.packetevents.utils.protocolsupport
 io.github.retrooper.packetevents.utils.reflection
 io.github.retrooper.packetevents.utils.server
 io.github.retrooper.packetevents.utils.v_1_7_10
 io.github.retrooper.packetevents.utils.vector
-io.github.retrooper.packetevents.utils.versionlookup
-io.github.retrooper.packetevents.utils.viaversion
