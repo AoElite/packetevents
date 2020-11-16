@@ -36,7 +36,6 @@ io.github.retrooper.packetevents.packetwrappers.login.in
 io.github.retrooper.packetevents.packetwrappers.login.out
 io.github.retrooper.packetevents.packetwrappers.out.abilities
 io.github.retrooper.packetevents.packetwrappers.out.animation
-io.github.retrooper.packetevents.packetwrappers.out.blockchange
 io.github.retrooper.packetevents.packetwrappers.out.chat
 io.github.retrooper.packetevents.packetwrappers.out.custompayload
 io.github.retrooper.packetevents.packetwrappers.out.entity
