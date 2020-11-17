@@ -62,5 +62,9 @@ io.github.retrooper.packetevents.utils.nms
 io.github.retrooper.packetevents.utils.player
 io.github.retrooper.packetevents.utils.reflection
 io.github.retrooper.packetevents.utils.server
-io.github.retrooper.packetevents.utils.v_1_7_10
 io.github.retrooper.packetevents.utils.vector
+io.github.retrooper.packetevents.utils.versionlookup
+io.github.retrooper.packetevents.utils.versionlookup.protocollib
+io.github.retrooper.packetevents.utils.versionlookup.protocolsupport
+io.github.retrooper.packetevents.utils.versionlookup.v_1_7_10
+io.github.retrooper.packetevents.utils.versionlookup.viaversion
