@@ -1,6 +1,5 @@
 io.github.retrooper.packetevents
 io.github.retrooper.packetevents.annotations
-io.github.retrooper.packetevents.bungee
 io.github.retrooper.packetevents.enums
 io.github.retrooper.packetevents.event
 io.github.retrooper.packetevents.event.annotation
