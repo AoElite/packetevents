@@ -49,14 +49,14 @@ public class NBTSerializer<IN, OUT> implements NBTReader<NBT, IN>, NBTWriter<NBT
 
     @Override
     public NBT deserializeTag(NBTLimiter limiter, IN from, boolean named) throws IOException {
-        NBTType<?> type = readTagType(limiter, from);
+        NBTType<?> type = readTagType(limiter, 0, from);
         if (type == NBTType.END) {
             return null;
         }
         if (named) {
-            readTagName(limiter, from);
+            readTagName(limiter, 0, from);
         }
-        return readTag(limiter, from, type);
+        return readTag(limiter, 0, from, type);
     }
 
     @Override
@@ -89,8 +89,8 @@ public class NBTSerializer<IN, OUT> implements NBTReader<NBT, IN>, NBTWriter<NBT
         typeWriters.put(type, typeWriter);
     }
 
-    NBTType<?> readTagType(NBTLimiter limiter, IN from) throws IOException {
-        int id = idReader.readId(limiter, from);
+    NBTType<?> readTagType(NBTLimiter limiter, int depth, IN from) throws IOException {
+        int id = idReader.readId(limiter, depth, from);
         NBTType<?> type = idToType.get(id);
         if (type == null) {
             throw new IOException(MessageFormat.format("Unknown nbt type id {0}", id));
@@ -98,16 +98,16 @@ public class NBTSerializer<IN, OUT> implements NBTReader<NBT, IN>, NBTWriter<NBT
         return type;
     }
 
-    String readTagName(NBTLimiter limiter, IN from) throws IOException {
-        return nameReader.readName(limiter, from);
+    String readTagName(NBTLimiter limiter, int depth, IN from) throws IOException {
+        return nameReader.readName(limiter, depth, from);
     }
 
-    NBT readTag(NBTLimiter limiter, IN from, NBTType<?> type) throws IOException {
+    NBT readTag(NBTLimiter limiter, int depth, IN from, NBTType<?> type) throws IOException {
         TagReader<IN, ? extends NBT> f = typeReaders.get(type);
         if (f == null) {
             throw new IOException(MessageFormat.format("No reader registered for nbt type {0}", type));
         }
-        return f.readTag(limiter, from);
+        return f.readTag(limiter, depth, from);
     }
 
     void writeTagType(OUT stream, NBTType<?> type) throws IOException {
@@ -133,7 +133,7 @@ public class NBTSerializer<IN, OUT> implements NBTReader<NBT, IN>, NBTWriter<NBT
 
     @FunctionalInterface
     protected interface IdReader<T> {
-        int readId(NBTLimiter limiter, T from) throws IOException;
+        int readId(NBTLimiter limiter, int depth, T from) throws IOException;
     }
 
     @FunctionalInterface
@@ -143,7 +143,7 @@ public class NBTSerializer<IN, OUT> implements NBTReader<NBT, IN>, NBTWriter<NBT
 
     @FunctionalInterface
     protected interface NameReader<T> {
-        String readName(NBTLimiter limiter, T from) throws IOException;
+        String readName(NBTLimiter limiter, int depth, T from) throws IOException;
     }
 
     @FunctionalInterface
@@ -153,7 +153,7 @@ public class NBTSerializer<IN, OUT> implements NBTReader<NBT, IN>, NBTWriter<NBT
 
     @FunctionalInterface
     protected interface TagReader<IN, T extends NBT> {
-        T readTag(NBTLimiter limiter, IN from) throws IOException;
+        T readTag(NBTLimiter limiter, int depth, IN from) throws IOException;
     }
 
     @FunctionalInterface

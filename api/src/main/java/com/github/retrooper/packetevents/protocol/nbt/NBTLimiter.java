@@ -24,6 +24,8 @@ public interface NBTLimiter {
 
     int DEFAULT_MAX_SIZE = 2097152;
 
+    int MAX_DEPTH = 512;
+
     static NBTLimiter noop() {
         return new NBTLimiter() {
             @Override

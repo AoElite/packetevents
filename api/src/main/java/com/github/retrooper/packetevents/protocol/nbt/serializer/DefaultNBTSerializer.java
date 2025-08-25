@@ -32,50 +32,50 @@ public class DefaultNBTSerializer extends NBTSerializer<DataInput, DataOutput> {
     @SuppressWarnings("unchecked")
     public DefaultNBTSerializer() {
         super(
-                (limiter, dataInput) -> {
+                (limiter, depth, dataInput) -> {
                     limiter.increment(1);
                     return dataInput.readByte();
                 },
                 DataOutput::writeByte,
-                (limiter, dataInput) -> {
+                (limiter, depth, dataInput) -> {
                     String name = dataInput.readUTF();
                     limiter.increment(name.length() * 2 + 28);
                     return name;
                 },
                 DataOutput::writeUTF
         );
-        registerType(NBTType.END, 0, (limiter, stream) -> {
+        registerType(NBTType.END, 0, (limiter, depth, stream) -> {
             limiter.increment(8);
             return NBTEnd.INSTANCE;
         }, (stream, tag) -> {
         });
-        registerType(NBTType.BYTE, 1, (limiter, stream) -> {
+        registerType(NBTType.BYTE, 1, (limiter, depth, stream) -> {
             limiter.increment(9);
             return new NBTByte(stream.readByte());
         }, (stream, tag) -> stream.writeByte(tag.getAsByte()));
-        registerType(NBTType.SHORT, 2, (limiter, stream) -> {
+        registerType(NBTType.SHORT, 2, (limiter, depth, stream) -> {
             limiter.increment(10);
             return new NBTShort(stream.readShort());
         }, (stream, tag) -> stream.writeShort(tag.getAsShort()));
-        registerType(NBTType.INT, 3, (limiter, stream) -> {
+        registerType(NBTType.INT, 3, (limiter, depth, stream) -> {
             limiter.increment(12);
             return new NBTInt(stream.readInt());
         }, (stream, tag) -> stream.writeInt(tag.getAsInt()));
-        registerType(NBTType.LONG, 4, (limiter, stream) -> {
+        registerType(NBTType.LONG, 4, (limiter, depth, stream) -> {
             limiter.increment(16);
             return new NBTLong(stream.readLong());
         }, (stream, tag) -> stream.writeLong(tag.getAsLong()));
-        registerType(NBTType.FLOAT, 5, (limiter, stream) -> {
+        registerType(NBTType.FLOAT, 5, (limiter, depth, stream) -> {
             limiter.increment(12);
             return new NBTFloat(stream.readFloat());
         }, (stream, tag) -> stream.writeFloat(tag.getAsFloat()));
-        registerType(NBTType.DOUBLE, 6, (limiter, stream) -> {
+        registerType(NBTType.DOUBLE, 6, (limiter, depth, stream) -> {
             limiter.increment(16);
             return new NBTDouble(stream.readDouble());
         }, (stream, tag) -> stream.writeDouble(tag.getAsDouble()));
         registerType(
                 NBTType.BYTE_ARRAY, 7,
-                (limiter, stream) -> {
+                (limiter, depth, stream) -> {
                     limiter.increment(24);
                     int length = stream.readInt();
 
@@ -95,18 +95,22 @@ public class DefaultNBTSerializer extends NBTSerializer<DataInput, DataOutput> {
                     stream.write(array);
                 }
         );
-        registerType(NBTType.STRING, 8, (limiter, stream) -> {
+        registerType(NBTType.STRING, 8, (limiter, depth, stream) -> {
             limiter.increment(36);
             String string = stream.readUTF();
-            limiter.increment(string.length() * 2);
+            int length = string.length();
+            if (length >= 1 << 16) throw new IllegalArgumentException("String length is too large: " + length);
+            limiter.increment(length * 2);
             return new NBTString(string);
         }, (stream, tag) -> stream.writeUTF(tag.getValue()));
         registerType(
                 NBTType.LIST, 9,
-                (limiter, stream) -> {
+                (limiter, depth, stream) -> {
+                    if (depth++ > NBTLimiter.MAX_DEPTH)
+                        throw new IllegalStateException("NBT depth is too high: " + depth);
                     limiter.increment(37);
 
-                    NBTType<? extends NBT> valueType = readTagType(limiter, stream);
+                    NBTType<? extends NBT> valueType = readTagType(limiter, depth, stream);
                     int size = stream.readInt();
 
                     if ((valueType == NBTType.END) && (size > 0)) {
@@ -115,7 +119,7 @@ public class DefaultNBTSerializer extends NBTSerializer<DataInput, DataOutput> {
                     limiter.increment(4 * size);
                     NBTList<NBT> list = new NBTList<>((NBTType<NBT>) valueType, size);
                     for (int i = 0; i < size; i++) {
-                        list.addTag(readTag(limiter, stream, valueType));
+                        list.addTag(readTag(limiter, depth, stream, valueType));
                     }
                     return list;
                 },
@@ -129,15 +133,16 @@ public class DefaultNBTSerializer extends NBTSerializer<DataInput, DataOutput> {
         );
         registerType(
                 NBTType.COMPOUND, 10,
-                (limiter, stream) -> {
+                (limiter, depth, stream) -> {
+                    if (depth++ > NBTLimiter.MAX_DEPTH)
+                        throw new IllegalStateException("NBT depth is over threshold: " + (depth / NBTLimiter.MAX_DEPTH));
                     limiter.increment(48);
-
                     NBTCompound compound = new NBTCompound();
                     NBTType<?> valueType;
-                    while ((valueType = readTagType(limiter, stream)) != NBTType.END) {
-                        String name = readTagName(limiter, stream);
-                        NBT nbt = readTag(limiter, stream, valueType);
-                        if(!compound.getTags().containsKey(name)) limiter.increment(36);
+                    while ((valueType = readTagType(limiter, depth, stream)) != NBTType.END) {
+                        String name = readTagName(limiter, depth, stream);
+                        NBT nbt = readTag(limiter, depth, stream, valueType);
+                        if (!compound.getTags().containsKey(name)) limiter.increment(36);
                         compound.setTag(name, nbt);
                     }
                     return compound;
@@ -154,7 +159,7 @@ public class DefaultNBTSerializer extends NBTSerializer<DataInput, DataOutput> {
         );
         registerType(
                 NBTType.INT_ARRAY, 11,
-                (limiter, stream) -> {
+                (limiter, depth, stream) -> {
                     limiter.increment(24);
                     int length = stream.readInt();
 
@@ -180,7 +185,7 @@ public class DefaultNBTSerializer extends NBTSerializer<DataInput, DataOutput> {
         );
         registerType(
                 NBTType.LONG_ARRAY, 12,
-                (limiter, stream) -> {
+                (limiter, depth, stream) -> {
                     limiter.increment(24);
                     int length = stream.readInt();
 
